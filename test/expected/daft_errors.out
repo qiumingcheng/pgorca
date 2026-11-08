@@ -46,7 +46,6 @@ BEGIN
 END
 $$;
 DROP FUNCTION pg_daft_pending_arrow_selftest_v1();
-
 \pset tuples_only off
 SET pg_orca.daft_enable = 'auto';
 CREATE TABLE daft_err_t(a int unique);

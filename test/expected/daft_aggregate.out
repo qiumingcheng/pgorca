@@ -358,6 +358,8 @@ CREATE TEMP TABLE pg_not_null_minmax AS
 SELECT min(v2) AS min2, max(v2) AS max2, min(v4) AS min4, max(v4) AS max4 FROM daft_agg_not_null;
 CREATE TEMP TABLE pg_empty_not_null_minmax AS
 SELECT min(v2) AS min2, max(v2) AS max2, min(v4) AS min4, max(v4) AS max4 FROM daft_agg_not_null_empty;
+-- The synthetic cost profile is admitted only with force + trace.
+SET pg_orca.daft_trace = on;
 SET pg_orca.daft_enable = 'force';
 SET pg_orca.daft_prefer_plan = on;
 DO $$
@@ -370,10 +372,14 @@ BEGIN
     END IF;
 END
 $$;
+INFO:  pg_orca daft_trace selected=daft reason=PGDAFT_CBO_DAFT_WINNER daft_prefer_plan=on daft_plan_cost_multiplier=0.100000 selected_plan_total_cost=22.532824 pg_to_arrow_calls=2 pg_to_arrow_min=0.012144 arrow_to_pg_calls=2 arrow_to_pg_min=50.012144 project_calls=0 project_min=0.000000 limit_calls=0 limit_min=0.000000
+INFO:  pg_orca daft_trace selected=daft reason=PGDAFT_CBO_DAFT_WINNER daft_prefer_plan=on daft_plan_cost_multiplier=0.100000 selected_plan_total_cost=22.532824 pg_to_arrow_calls=2 pg_to_arrow_min=0.012144 arrow_to_pg_calls=2 arrow_to_pg_min=50.012144 project_calls=0 project_min=0.000000 limit_calls=0 limit_min=0.000000
 CREATE TEMP TABLE daft_not_null_minmax AS
 SELECT min(v2) AS min2, max(v2) AS max2, min(v4) AS min4, max(v4) AS max4 FROM daft_agg_not_null;
+INFO:  pg_orca daft_trace selected=daft reason=PGDAFT_CBO_DAFT_WINNER daft_prefer_plan=on daft_plan_cost_multiplier=0.100000 selected_plan_total_cost=22.532824 pg_to_arrow_calls=2 pg_to_arrow_min=0.012144 arrow_to_pg_calls=2 arrow_to_pg_min=50.012144 project_calls=0 project_min=0.000000 limit_calls=0 limit_min=0.000000
 CREATE TEMP TABLE daft_empty_not_null_minmax AS
 SELECT min(v2) AS min2, max(v2) AS max2, min(v4) AS min4, max(v4) AS max4 FROM daft_agg_not_null_empty;
+INFO:  pg_orca daft_trace selected=daft reason=PGDAFT_CBO_DAFT_WINNER daft_prefer_plan=on daft_plan_cost_multiplier=0.100000 selected_plan_total_cost=22.532824 pg_to_arrow_calls=2 pg_to_arrow_min=0.012144 arrow_to_pg_calls=2 arrow_to_pg_min=50.012144 project_calls=0 project_min=0.000000 limit_calls=0 limit_min=0.000000
 SET pg_orca.daft_enable = 'off';
 DO $$
 BEGIN
@@ -393,6 +399,5 @@ $$;
 DROP TABLE daft_agg_not_null, daft_agg_not_null_empty,
            pg_not_null_minmax, pg_empty_not_null_minmax,
            daft_not_null_minmax, daft_empty_not_null_minmax;
-
 DROP FUNCTION daft_aggregate_plan_shape(text);
 DROP TABLE daft_agg_plan_probe, daft_agg_all_null, daft_agg_empty, daft_agg_input;

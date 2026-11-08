@@ -129,6 +129,8 @@ FROM generate_series(1, 12000) AS g(i);
 ANALYZE daft_filter_not_null;
 CREATE TEMP TABLE pg_filter_not_null AS
 SELECT id FROM daft_filter_not_null WHERE id >= 11998 AND id = nullable_id;
+-- The synthetic cost profile is admitted only with force + trace.
+SET pg_orca.daft_trace = on;
 SET pg_orca.daft_enable = 'force';
 SET pg_orca.daft_prefer_plan = on;
 DO $$

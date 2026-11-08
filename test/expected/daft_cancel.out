@@ -20,7 +20,6 @@ ERROR:  canceling statement due to statement timeout
 -- Repeat cancellation in the same session before the successful retry.
 SELECT pg_daft_exec_selftest_v1(10000, 10000, -1, 10000);
 ERROR:  canceling statement due to statement timeout
-
 -- Backend and Bridge recover: the timeout did not leak the active handle.
 RESET statement_timeout;
 SELECT pg_daft_exec_selftest_v1(3, 3, -1, 0);

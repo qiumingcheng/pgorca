@@ -232,6 +232,8 @@ FROM generate_series(1, 12000) AS g(i);
 ANALYZE daft_filter_not_null;
 CREATE TEMP TABLE pg_filter_not_null AS
 SELECT id FROM daft_filter_not_null WHERE id >= 11998 AND id = nullable_id;
+-- The synthetic cost profile is admitted only with force + trace.
+SET pg_orca.daft_trace = on;
 SET pg_orca.daft_enable = 'force';
 SET pg_orca.daft_prefer_plan = on;
 DO $$
@@ -242,8 +244,10 @@ BEGIN
     END IF;
 END
 $$;
+INFO:  pg_orca daft_trace selected=daft reason=PGDAFT_CBO_DAFT_WINNER daft_prefer_plan=on daft_plan_cost_multiplier=0.100000 selected_plan_total_cost=23.939211 pg_to_arrow_calls=2 pg_to_arrow_min=0.012048 arrow_to_pg_calls=2 arrow_to_pg_min=50.012048 project_calls=0 project_min=0.000000 limit_calls=0 limit_min=0.000000
 CREATE TEMP TABLE daft_filter_not_null_result AS
 SELECT id FROM daft_filter_not_null WHERE id >= 11998 AND id = nullable_id;
+INFO:  pg_orca daft_trace selected=daft reason=PGDAFT_CBO_DAFT_WINNER daft_prefer_plan=on daft_plan_cost_multiplier=0.100000 selected_plan_total_cost=23.939211 pg_to_arrow_calls=2 pg_to_arrow_min=0.012048 arrow_to_pg_calls=2 arrow_to_pg_min=50.012048 project_calls=0 project_min=0.000000 limit_calls=0 limit_min=0.000000
 DO $$
 BEGIN
     IF EXISTS (
@@ -257,7 +261,6 @@ END
 $$;
 DROP TABLE daft_filter_not_null, pg_filter_not_null, daft_filter_not_null_result;
 SET pg_orca.daft_prefer_plan = off;
-
 DROP FUNCTION daft_filter_plan_uses_daft(text);
 DROP VIEW daft_filter_barrier;
 DROP TABLE daft_filter_small;

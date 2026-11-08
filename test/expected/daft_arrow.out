@@ -93,5 +93,4 @@ BEGIN
 END
 $$;
 DROP FUNCTION pg_daft_arrow_ownership_selftest_v1();
-
 -- End of P0-007-A metadata checks.

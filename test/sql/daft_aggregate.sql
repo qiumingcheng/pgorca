@@ -255,6 +255,8 @@ CREATE TEMP TABLE pg_not_null_minmax AS
 SELECT min(v2) AS min2, max(v2) AS max2, min(v4) AS min4, max(v4) AS max4 FROM daft_agg_not_null;
 CREATE TEMP TABLE pg_empty_not_null_minmax AS
 SELECT min(v2) AS min2, max(v2) AS max2, min(v4) AS min4, max(v4) AS max4 FROM daft_agg_not_null_empty;
+-- The synthetic cost profile is admitted only with force + trace.
+SET pg_orca.daft_trace = on;
 SET pg_orca.daft_enable = 'force';
 SET pg_orca.daft_prefer_plan = on;
 DO $$
