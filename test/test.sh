@@ -62,6 +62,15 @@ for arg in "$@"; do
     esac
 done
 
+# Keep the lazy-loader fixtures in this test run's private build tree.  The
+# migrated regression must not depend on an unpublished workspace task pack.
+export PG_ORCA_TEST_DIR="$SCRIPT_DIR"
+if [[ $RUN_PG_TESTS -eq 0 &&
+      ( ${#TEST_NAMES[@]} -eq 0 || " ${TEST_NAMES[*]} " == *" daft_loader "* ) ]]; then
+    export PG_ORCA_LOADER_FIXTURE_DIR
+    PG_ORCA_LOADER_FIXTURE_DIR=$(mktemp -d "$(cd "$BUILD_DIR" && pwd)/daft-loader-fixtures.XXXXXX")
+fi
+
 # Export gpdiff.pl path so bin/diff can find it regardless of CWD.
 export GPDIFF_PATH="$SCRIPT_DIR/gpdiff.pl"
 

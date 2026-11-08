@@ -37,6 +37,15 @@ These tests live in `test/sql/` and `test/expected/`. They load pg_orca, enable 
 test/test.sh --orca-tests
 ```
 
+The `daft_loader` regression builds its incompatible native ABI fixtures with
+a C compiler and Python 3. Its preload-isolation check requires Linux `/proc`.
+The helper and fixture source live under `test/helpers` and `test/fixtures`;
+no workspace task package is needed. The harness creates a private directory
+under `PG_ORCA_TEST_BUILD_DIR` for each run and retains it for inspection.
+The canonical Bridge headers default to the sibling
+`daft/src/daft-pg-bridge/include` tree. For a custom header location, export
+`PG_ORCA_DAFT_BRIDGE_INCLUDE_DIR` consistently with the CMake setting.
+
 ### PostgreSQL standard regression suite with ORCA loaded
 
 Runs PostgreSQL's full `parallel_schedule` with `pg_orca` loaded as an extension. This checks that ORCA does not break standard SQL semantics.
